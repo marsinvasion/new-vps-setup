@@ -119,3 +119,31 @@ Connection to 192.3.2.188 closed.
 
 $ ssh dev@192.3.2.188
 ```
+
+## Configure ssh
+```
+dev@us:~$ sudo vi /etc/ssh/sshd_config
+[sudo] password for dev:
+```
+Change the port and disallow root login
+```
+Port 123
+PermitRootLogin no
+```
+Restart ssh
+```
+dev@us:~$ sudo service ssh restart
+ssh stop/waiting
+ssh start/running, process 1552
+```
+Log back in to see if the settings worked
+```
+$ ssh root@192.3.2.188
+ssh: connect to host 192.3.2.188 port 22: Connection refused
+
+$ ssh -p 123 root@192.3.2.188
+root@192.3.2.188's password:
+Permission denied, please try again.
+
+$ ssh -p 123 dev@192.3.2.188
+```
