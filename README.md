@@ -147,3 +147,54 @@ Permission denied, please try again.
 
 $ ssh -p 123 dev@192.3.2.188
 ```
+
+## Setup firewall
+Your initial iptable should look like this
+```
+dev@us:~$ sudo iptables -L
+[sudo] password for dev:
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+```
+
+Add rules
+```
+dev@us:~$ sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+dev@us:~$ sudo iptables -A INPUT -p tcp --dport 123 -j ACCEPT
+dev@us:~$ sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+dev@us:~$ sudo iptables -A INPUT -j DROP
+dev@us:~$ sudo iptables -I INPUT 1 -i lo -j ACCEPT
+```
+
+## Update apt-get
+```
+dev@us:~$ sudo apt-get upgrade
+[sudo] password for dev:
+dev@us:~$ sudo apt-get update
+```
+Install iptables-persistent to save iptables
+```
+dev@us:~$ sudo apt-get install iptables-persistent
+```
+reboot device to see if iptables have been persisted
+```
+dev@us:~$ sudo reboot
+
+Broadcast message from dev@us
+	(/dev/pts/0) at 20:58 ...
+
+The system is going down for reboot NOW!
+dev@us:~$ Connection to 192.3.2.188 closed by remote host.
+Connection to 192.3.2.188 closed.
+$ ssh -p 123 dev@192.3.2.188
+dev@us:~$ sudo iptables -L -v
+```
+You should see your iptable rules
+
+
