@@ -229,3 +229,31 @@ Log out and log back in and the following command should work
 ```
 dev@us:~$ git
 ```
+
+## Install nodejs
+I use node.js currently for dev. NVM is the easiest way to manage node.js version
+```
+dev@us:~$ git clone https://github.com/creationix/nvm.git ~/.nvm
+dev@us:~$ vi ~/.bashrc
+
+source ~/.nvm/nvm.sh
+```
+Install node.js
+```
+dev@us:~$ nvm ls-remote
+dev@us:~$ nvm install 0.10.23
+dev@us:~$ nvm ls
+
+  v0.10.23
+current: 	v0.10.23
+
+dev@us:~$ nvm alias default 0.10.23
+default -> 0.10.23 (-> v0.10.23)
+dev@us:~$ nvm ls
+
+  v0.10.23
+current: 	v0.10.23
+default -> 0.10.23 (-> v0.10.23)
+```
+
+And now you are all set up. That was quick.
