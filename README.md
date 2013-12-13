@@ -22,14 +22,16 @@ Change the timezone if you like your timezones to match
 
 Perl is used by a few packages, so if you get the following annoying timezone message, change it as well
 
-```root@us:~# perl -e exit
+```
+root@us:~# perl -e exit
 perl: warning: Setting locale failed.
 perl: warning: Please check that your locale settings:
 	LANGUAGE = (unset),
 	LC_ALL = (unset),
 	LANG = "en_US.UTF-8"
     are supported and installed on your system.
-perl: warning: Falling back to the standard locale ("C").```
+perl: warning: Falling back to the standard locale ("C").
+```
 
 ```root@us:~# sudo locale-gen en_US.UTF-8
 Generating locales...
