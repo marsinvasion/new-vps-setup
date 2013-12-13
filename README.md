@@ -197,4 +197,35 @@ dev@us:~$ sudo iptables -L -v
 ```
 You should see your iptable rules
 
-
+## Install git
+I use git pretty heavily and thats what I'll install next
+```
+dev@us:~$ wget https://git-core.googlecode.com/files/git-1.8.5.tar.gz
+dev@us:~$ tar -zxvf git-1.8.5.tar.gz
+dev@us:~$ cd git-1.8.5
+dev@us:~/git-1.8.5$ sudo make
+GIT_VERSION = 1.8.5
+    * new build flags
+    CC credential-store.o
+/bin/sh: 1: cc: not found
+make: *** [credential-store.o] Error 127
+```
+Once you start making, you'll notice dependency errors like above, fix as necessary
+```
+dev@us:~/git-1.8.5$ sudo apt-get install gcc
+dev@us:~/git-1.8.5$ sudo apt-get install libssl-dev
+dev@us:~/git-1.8.5$ sudo apt-get install curl libcurl4-openssl-dev
+dev@us:~/git-1.8.5$ sudo apt-get install libexpat1-dev
+dev@us:~/git-1.8.5$ sudo make
+dev@us:~/git-1.8.5$ sudo make install
+dev@us:~$ sudo rm -rf git-1.8.5*
+```
+Add git to path
+```
+dev@us:~/git-1.8.5$ vi ~/.bashrc
+export PATH="$PATH:/home/dev/bin"
+```
+Log out and log back in and the following command should work
+```
+dev@us:~$ git
+```
