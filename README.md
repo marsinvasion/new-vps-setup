@@ -13,8 +13,10 @@ I've setup a few vps' this year but every time I set it up, I can't remember all
 
 ## Set timezone
 
-```root@us:~# date
-Fri Dec 13 09:09:00 EST 2013```
+```
+root@us:~# date
+Fri Dec 13 09:09:00 EST 2013
+```
 
 Change the timezone if you like your timezones to match
 
@@ -43,3 +45,42 @@ Generation complete.
 Now the following command should not contain any perl timezone warnings.
 
 `root@us:~# perl -e exit`
+
+## Add user
+
+Its recommended to not use root for day to day operations. Add your first user
+
+```
+root@us:~# adduser dev
+Adding user `dev' ...
+Adding new group `dev' (1000) ...
+Adding new user `dev' (1000) with group `dev' ...
+Enter new UNIX password:
+Retype new UNIX password:
+passwd: password updated successfully
+Changing the user information for dev
+Enter the new value, or press ENTER for the default
+	Full Name []: 
+	Room Number []:
+	Work Phone []:
+	Home Phone []:
+	Other []:
+Is the information correct? [Y/n] y
+```
+
+Give sudo permissions
+
+```
+root@us:~# visudo
+```
+
+Find root
+
+```
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+```
+Add the new user under root
+```
+dev     ALL=(ALL:ALL) ALL
+```
