@@ -84,3 +84,38 @@ Add the new user under root
 ```
 dev     ALL=(ALL:ALL) ALL
 ```
+
+## Log in as the new user
+
+```
+root@us:~# exit
+logout
+Connection to 192.3.2.188 closed.
+anoopsmac:NewsCube anoopkulkarni$ ssh dev@192.3.2.188
+dev@192.3.2.188's password:
+
+dev@us:~$
+```
+
+## Add keys
+
+Copy your public key (create a public/private key if you dont have one).
+
+```
+$ scp ~/id_rsa.pub dev@192.3.2.188:~/.
+dev@192.3.2.188's password:
+
+dev@us:~$ mkdir .ssh
+dev@us:~$ cat id_rsa.pub >> .ssh/authorized_keys
+
+$ chmod 500 -R .ssh/
+$ rm id_rsa.pub
+```
+Log out and log back in and you shouldn't need a key to log in
+```
+dev@us:~$ exit
+logout
+Connection to 192.3.2.188 closed.
+
+$ ssh dev@192.3.2.188
+```
