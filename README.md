@@ -33,10 +33,12 @@ perl: warning: Please check that your locale settings:
 perl: warning: Falling back to the standard locale ("C").
 ```
 
-```root@us:~# sudo locale-gen en_US.UTF-8
+```
+root@us:~# sudo locale-gen en_US.UTF-8
 Generating locales...
   en_US.UTF-8... done
-Generation complete.```
+Generation complete.
+```
 
 Now the following command should not contain any perl timezone warnings.
 
