@@ -7,25 +7,25 @@ I've setup a few vps' this year but every time I set it up, I can't remember all
 
 ## Initial login and change root password
 
-`$ ssh root@192.3.2.188`
+`$ ssh root@192.1.1.1`
 
-`root@us:~# passwd`
+`root@myserver:~# passwd`
 
 ## Set timezone
 
 ```
-root@us:~# date
+root@myserver:~# date
 Fri Dec 13 09:09:00 EST 2013
 ```
 
 Change the timezone if you like your timezones to match
 
-`root@us:~# sudo dpkg-reconfigure tzdata`
+`root@myserver:~# sudo dpkg-reconfigure tzdata`
 
 Perl is used by a few packages, so if you get the following annoying timezone message, change it as well
 
 ```
-root@us:~# perl -e exit
+root@myserver:~# perl -e exit
 perl: warning: Setting locale failed.
 perl: warning: Please check that your locale settings:
 	LANGUAGE = (unset),
@@ -36,7 +36,7 @@ perl: warning: Falling back to the standard locale ("C").
 ```
 
 ```
-root@us:~# sudo locale-gen en_US.UTF-8
+root@myserver:~# sudo locale-gen en_US.UTF-8
 Generating locales...
   en_US.UTF-8... done
 Generation complete.
@@ -44,21 +44,21 @@ Generation complete.
 
 Now the following command should not contain any perl timezone warnings.
 
-`root@us:~# perl -e exit`
+`root@myserver:~# perl -e exit`
 
 ## Add user
 
 Its recommended to not use root for day to day operations. Add your first user
 
 ```
-root@us:~# adduser dev
-Adding user `dev' ...
-Adding new group `dev' (1000) ...
-Adding new user `dev' (1000) with group `dev' ...
+root@myserver:~# adduser myuser
+Adding user `myuser' ...
+Adding new group `myuser' (1000) ...
+Adding new user `myuser' (1000) with group `myuser' ...
 Enter new UNIX password:
 Retype new UNIX password:
 passwd: password updated successfully
-Changing the user information for dev
+Changing the user information for myuser
 Enter the new value, or press ENTER for the default
 	Full Name []: 
 	Room Number []:
@@ -71,7 +71,7 @@ Is the information correct? [Y/n] y
 Give sudo permissions
 
 ```
-root@us:~# visudo
+root@myserver:~# visudo
 ```
 
 Find root
@@ -82,19 +82,19 @@ root    ALL=(ALL:ALL) ALL
 ```
 Add the new user under root
 ```
-dev     ALL=(ALL:ALL) ALL
+myuser     ALL=(ALL:ALL) ALL
 ```
 
 ## Log in as the new user
 
 ```
-root@us:~# exit
+root@myserver:~# exit
 logout
-Connection to 192.3.2.188 closed.
-anoopsmac:NewsCube anoopkulkarni$ ssh dev@192.3.2.188
-dev@192.3.2.188's password:
+Connection to 192.1.1.1 closed.
+anoopsmac:NewsCube anoopkulkarni$ ssh myuser@192.1.1.1
+myuser@192.1.1.1's password:
 
-dev@us:~$
+myuser@myserver:~$
 ```
 
 ## Add keys
@@ -102,28 +102,28 @@ dev@us:~$
 Copy your public key (create a public/private key if you dont have one).
 
 ```
-$ scp ~/id_rsa.pub dev@192.3.2.188:~/.
-dev@192.3.2.188's password:
+$ scp ~/id_rsa.pub myuser@192.1.1.1:~/.
+myuser@192.1.1.1's password:
 
-dev@us:~$ mkdir .ssh
-dev@us:~$ cat id_rsa.pub >> .ssh/authorized_keys
+myuser@myserver:~$ mkdir .ssh
+myuser@myserver:~$ cat id_rsa.pub >> .ssh/authorized_keys
 
 $ chmod 500 -R .ssh/
 $ rm id_rsa.pub
 ```
 Log out and log back in and you shouldn't need a key to log in
 ```
-dev@us:~$ exit
+myuser@myserver:~$ exit
 logout
-Connection to 192.3.2.188 closed.
+Connection to 192.1.1.1 closed.
 
-$ ssh dev@192.3.2.188
+$ ssh myuser@192.1.1.1
 ```
 
 ## Configure ssh
 ```
-dev@us:~$ sudo vi /etc/ssh/sshd_config
-[sudo] password for dev:
+myuser@myserver:~$ sudo vi /etc/ssh/sshd_config
+[sudo] password for myuser:
 ```
 Change the port and disallow root login
 ```
@@ -132,27 +132,27 @@ PermitRootLogin no
 ```
 Restart ssh
 ```
-dev@us:~$ sudo service ssh restart
+myuser@myserver:~$ sudo service ssh restart
 ssh stop/waiting
 ssh start/running, process 1552
 ```
 Log back in to see if the settings worked
 ```
-$ ssh root@192.3.2.188
-ssh: connect to host 192.3.2.188 port 22: Connection refused
+$ ssh root@192.1.1.1
+ssh: connect to host 192.1.1.1 port 22: Connection refused
 
-$ ssh -p 123 root@192.3.2.188
-root@192.3.2.188's password:
+$ ssh -p 123 root@192.1.1.1
+root@192.1.1.1's password:
 Permission denied, please try again.
 
-$ ssh -p 123 dev@192.3.2.188
+$ ssh -p 123 myuser@192.1.1.1
 ```
 
 ## Setup firewall
 Your initial iptable should look like this
 ```
-dev@us:~$ sudo iptables -L
-[sudo] password for dev:
+myuser@myserver:~$ sudo iptables -L
+[sudo] password for myuser:
 Chain INPUT (policy ACCEPT)
 target     prot opt source               destination
 
@@ -165,45 +165,45 @@ target     prot opt source               destination
 
 Add rules
 ```
-dev@us:~$ sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-dev@us:~$ sudo iptables -A INPUT -p tcp --dport 123 -j ACCEPT
-dev@us:~$ sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-dev@us:~$ sudo iptables -A INPUT -j DROP
-dev@us:~$ sudo iptables -I INPUT 1 -i lo -j ACCEPT
+myuser@myserver:~$ sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+myuser@myserver:~$ sudo iptables -A INPUT -p tcp --dport 123 -j ACCEPT
+myuser@myserver:~$ sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+myuser@myserver:~$ sudo iptables -A INPUT -j DROP
+myuser@myserver:~$ sudo iptables -I INPUT 1 -i lo -j ACCEPT
 ```
 
 ## Update apt-get
 ```
-dev@us:~$ sudo apt-get upgrade
-[sudo] password for dev:
-dev@us:~$ sudo apt-get update
+myuser@myserver:~$ sudo apt-get upgrade
+[sudo] password for myuser:
+myuser@myserver:~$ sudo apt-get update
 ```
 Install iptables-persistent to save iptables
 ```
-dev@us:~$ sudo apt-get install iptables-persistent
+myuser@myserver:~$ sudo apt-get install iptables-persistent
 ```
-reboot device to see if iptables have been persisted
+reboot myuserice to see if iptables have been persisted
 ```
-dev@us:~$ sudo reboot
+myuser@myserver:~$ sudo reboot
 
-Broadcast message from dev@us
-	(/dev/pts/0) at 20:58 ...
+Broadcast message from myuser@myserver
+	(/myuser/pts/0) at 20:58 ...
 
 The system is going down for reboot NOW!
-dev@us:~$ Connection to 192.3.2.188 closed by remote host.
-Connection to 192.3.2.188 closed.
-$ ssh -p 123 dev@192.3.2.188
-dev@us:~$ sudo iptables -L -v
+myuser@myserver:~$ Connection to 192.1.1.1 closed by remote host.
+Connection to 192.1.1.1 closed.
+$ ssh -p 123 myuser@192.1.1.1
+myuser@myserver:~$ sudo iptables -L -v
 ```
 You should see your iptable rules
 
 ## Install git
 I use git pretty heavily and thats what I'll install next
 ```
-dev@us:~$ wget https://git-core.googlecode.com/files/git-1.8.5.tar.gz
-dev@us:~$ tar -zxvf git-1.8.5.tar.gz
-dev@us:~$ cd git-1.8.5
-dev@us:~/git-1.8.5$ sudo make
+myuser@myserver:~$ wget https://git-core.googlecode.com/files/git-1.8.5.tar.gz
+myuser@myserver:~$ tar -zxvf git-1.8.5.tar.gz
+myuser@myserver:~$ cd git-1.8.5
+myuser@myserver:~/git-1.8.5$ sudo make
 GIT_VERSION = 1.8.5
     * new build flags
     CC credential-store.o
@@ -212,44 +212,44 @@ make: *** [credential-store.o] Error 127
 ```
 Once you start making, you'll notice dependency errors like above, fix as necessary
 ```
-dev@us:~/git-1.8.5$ sudo apt-get install gcc
-dev@us:~/git-1.8.5$ sudo apt-get install libssl-dev
-dev@us:~/git-1.8.5$ sudo apt-get install curl libcurl4-openssl-dev
-dev@us:~/git-1.8.5$ sudo apt-get install libexpat1-dev
-dev@us:~/git-1.8.5$ sudo make
-dev@us:~/git-1.8.5$ sudo make install
-dev@us:~$ sudo rm -rf git-1.8.5*
+myuser@myserver:~/git-1.8.5$ sudo apt-get install gcc
+myuser@myserver:~/git-1.8.5$ sudo apt-get install libssl-myuser
+myuser@myserver:~/git-1.8.5$ sudo apt-get install curl libcurl4-openssl-myuser
+myuser@myserver:~/git-1.8.5$ sudo apt-get install libexpat1-myuser
+myuser@myserver:~/git-1.8.5$ sudo make
+myuser@myserver:~/git-1.8.5$ sudo make install
+myuser@myserver:~$ sudo rm -rf git-1.8.5*
 ```
 Add git to path
 ```
-dev@us:~/git-1.8.5$ vi ~/.bashrc
-export PATH="$PATH:/home/dev/bin"
+myuser@myserver:~/git-1.8.5$ vi ~/.bashrc
+export PATH="$PATH:/home/myuser/bin"
 ```
 Log out and log back in and the following command should work
 ```
-dev@us:~$ git
+myuser@myserver:~$ git
 ```
 
 ## Install nodejs
-I use node.js currently for dev. NVM is the easiest way to manage node.js version
+I use node.js currently for myuser. NVM is the easiest way to manage node.js version
 ```
-dev@us:~$ git clone https://github.com/creationix/nvm.git ~/.nvm
-dev@us:~$ vi ~/.bashrc
+myuser@myserver:~$ git clone https://github.com/creationix/nvm.git ~/.nvm
+myuser@myserver:~$ vi ~/.bashrc
 
 source ~/.nvm/nvm.sh
 ```
 Install node.js
 ```
-dev@us:~$ nvm ls-remote
-dev@us:~$ nvm install 0.10.23
-dev@us:~$ nvm ls
+myuser@myserver:~$ nvm ls-remote
+myuser@myserver:~$ nvm install 0.10.23
+myuser@myserver:~$ nvm ls
 
   v0.10.23
 current: 	v0.10.23
 
-dev@us:~$ nvm alias default 0.10.23
+myuser@myserver:~$ nvm alias default 0.10.23
 default -> 0.10.23 (-> v0.10.23)
-dev@us:~$ nvm ls
+myuser@myserver:~$ nvm ls
 
   v0.10.23
 current: 	v0.10.23
