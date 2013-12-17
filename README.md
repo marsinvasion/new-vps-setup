@@ -255,5 +255,7 @@ myuser@myserver:~$ nvm ls
 current: 	v0.10.23
 default -> 0.10.23 (-> v0.10.23)
 ```
+## Add a dialog program useful for apt-get interactions
 
+myuser@myserver:~$ sudo apt-get install dialog
 And now you are all set up. That was quick.
