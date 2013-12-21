@@ -260,3 +260,10 @@ default -> 0.10.23 (-> v0.10.23)
 myuser@myserver:~$ sudo apt-get install dialog
 ```
 And now you are all set up. That was quick.
+## Increase upload size
+If you host any websites which use php (wordpress for e.g.), its useful to increase the default file upload size
+```
+myuser@myserver:~$ sudo vi /etc/php5/apache2/php.ini
+
+upload_max_filesize = 10M
+```
