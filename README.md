@@ -267,3 +267,8 @@ myuser@myserver:~$ sudo vi /etc/php5/apache2/php.ini
 
 upload_max_filesize = 10M
 ```
+It's also useful to enable mod rewrite (e.g. useful for permalinks in wordpres)
+```
+myuser@myserver:~$ sudo a2enmod rewrite
+Enabling module rewrite.
+```
