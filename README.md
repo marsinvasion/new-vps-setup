@@ -259,7 +259,10 @@ default -> 0.10.23 (-> v0.10.23)
 ```
 myuser@myserver:~$ sudo apt-get install dialog
 ```
-And now you are all set up. That was quick.
+## Add php support to apache
+````
+myuser@myserver:~$ sudo apt-get install php5 libapache2-mod-php5
+````
 ## Increase upload size
 If you host any websites which use php (wordpress for e.g.), its useful to increase the default file upload size
 ```
@@ -272,3 +275,14 @@ It's also useful to enable mod rewrite (e.g. useful for permalinks in wordpres)
 myuser@myserver:~$ sudo a2enmod rewrite
 Enabling module rewrite.
 ```
+## Keep track of ubuntu upgrades
+````
+myuser@myserver:~$ sudo lsb_release -a
+myuser@myserver:~$ sudo apt-get install update-manager-core update-manager
+````
+Upgrade ubuntu if there are new versions 
+````
+myuser@myserver:~$ sudo do-release-upgrade
+````
+
+And now you are all set up. That was quick.
