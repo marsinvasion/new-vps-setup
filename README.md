@@ -91,7 +91,7 @@ myuser     ALL=(ALL:ALL) ALL
 root@myserver:~# exit
 logout
 Connection to 192.1.1.1 closed.
-anoopsmac:NewsCube anoopkulkarni$ ssh myuser@192.1.1.1
+$ ssh myuser@192.1.1.1
 myuser@192.1.1.1's password:
 
 myuser@myserver:~$
@@ -149,6 +149,8 @@ $ ssh -p 123 myuser@192.1.1.1
 ```
 
 ## Setup firewall
+Add rules for your new ssh port, http and https ports
+
 Your initial iptable should look like this
 ```
 myuser@myserver:~$ sudo iptables -L
@@ -170,6 +172,7 @@ myuser@myserver:~$ sudo iptables -A INPUT -p tcp --dport 123 -j ACCEPT
 myuser@myserver:~$ sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 myuser@myserver:~$ sudo iptables -A INPUT -j DROP
 myuser@myserver:~$ sudo iptables -I INPUT 1 -i lo -j ACCEPT
+myuser@myserver:~$ sudo iptables -I INPUT 1 -p tcp --dport 443 -j ACCEPT
 ```
 
 ## Update apt-get
@@ -182,7 +185,7 @@ Install iptables-persistent to save iptables
 ```
 myuser@myserver:~$ sudo apt-get install iptables-persistent
 ```
-reboot myuserice to see if iptables have been persisted
+reboot myuser to see if iptables have been persisted
 ```
 myuser@myserver:~$ sudo reboot
 
@@ -284,5 +287,12 @@ Upgrade ubuntu if there are new versions
 ````
 myuser@myserver:~$ sudo do-release-upgrade
 ````
+
+## Give nodejs access to port 80
+````
+sudo apt-get install libcap2-bin
+sudo setcap cap_net_bind_service=+ep /usr/bin/nodejs
+````
+
 
 And now you are all set up. That was quick.
