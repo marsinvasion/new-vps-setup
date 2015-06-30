@@ -288,7 +288,19 @@ Upgrade ubuntu if there are new versions
 myuser@myserver:~$ sudo do-release-upgrade
 ````
 
-## Give nodejs access to port 80
+## setup redis to accept connections from particular port
+### configure redis to listen on all network interfaces
+````
+vi /etc/redis/redis.conf
+bind 0.0.0.0 (it was initially pointing to 127.0.0.1)
+sudo service redis-server restart
+
+sudo iptables -I INPUT 1 -p tcp --dport xxxx -s x.x.x.x -j ACCEPT
+sudo service iptables-persistent save
+
+````
+
+## Give nodejs access to port 80 if needed
 ````
 sudo apt-get install libcap2-bin
 sudo setcap cap_net_bind_service=+ep /usr/bin/nodejs
