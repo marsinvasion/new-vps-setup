@@ -288,7 +288,7 @@ Upgrade ubuntu if there are new versions
 myuser@myserver:~$ sudo do-release-upgrade
 ````
 
-## setup redis to accept connections from particular port
+## setup redis to accept connections from particular ip address
 ### configure redis to listen on all network interfaces
 ````
 vi /etc/redis/redis.conf
