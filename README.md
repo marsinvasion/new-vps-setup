@@ -1,9 +1,6 @@
 new-vps-setup
 =============
 
-## Why
-
-I've setup a few vps' this year but every time I set it up, I can't remember all the steps. So I'm putting it down here for the next time
 
 ## Initial login and change root password
 
@@ -174,6 +171,12 @@ myuser@myserver:~$ sudo iptables -A INPUT -j DROP
 myuser@myserver:~$ sudo iptables -I INPUT 1 -i lo -j ACCEPT
 myuser@myserver:~$ sudo iptables -I INPUT 1 -p tcp --dport 443 -j ACCEPT
 ```
+
+Accept connections from a particular ip
+
+---
+myuser@myserver:~$ sudo iptables -I INPUT 1 -p tcp -s 185.38.47.41 --dport 8379 -j ACCEPT
+---
 
 ## Update apt-get
 ```
