@@ -173,10 +173,9 @@ myuser@myserver:~$ sudo iptables -I INPUT 1 -p tcp --dport 443 -j ACCEPT
 ```
 
 Accept connections from a particular ip
-
----
+```
 myuser@myserver:~$ sudo iptables -I INPUT 1 -p tcp -s 185.38.47.41 --dport 8379 -j ACCEPT
----
+```
 
 ## Update apt-get
 ```
