@@ -172,11 +172,6 @@ myuser@myserver:~$ sudo iptables -I INPUT 1 -i lo -j ACCEPT
 myuser@myserver:~$ sudo iptables -I INPUT 1 -p tcp --dport 443 -j ACCEPT
 ```
 
-Accept connections from a particular ip
-```
-myuser@myserver:~$ sudo iptables -I INPUT 1 -p tcp -s 127.0.0.1 --dport 8379 -j ACCEPT
-```
-
 ## Update apt-get
 ```
 myuser@myserver:~$ sudo apt-get upgrade
@@ -306,6 +301,20 @@ sudo service iptables-persistent save
 ````
 sudo apt-get install libcap2-bin
 sudo setcap cap_net_bind_service=+ep /usr/bin/nodejs
+````
+
+## Add another redis instance if needed
+
+````
+sudo cp /etc/init.d/redis-server /etc/init.d/redis-tweet
+sudo cp /etc/redis/redis.conf /etc/redis/redis-tweet.conf 
+````
+Change log and redis pid file so that it matches. Change dump file and append only file if needed
+
+Add it to startup script
+````
+sudo update-rc.d redis-tweet defaults
+sudo service redis-tweet restart
 ````
 
 
